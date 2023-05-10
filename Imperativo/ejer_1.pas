@@ -43,6 +43,42 @@ compraPorCliente = record
 end;
 
 
+procedure inicializar(var v: vector);
+var
+    i: cantPuestos;
+begin
+    for i:= 1 to puesto do begin
+        v[i]:= nil;
+    end;
+end;
+
+procedure imprimirListas(l: lista);
+begin
+    while (l^.sig <> nil) do begin
+        writeln('puesto: ', l^.datoL.puesto,
+                ' codigo: ', l^.datoL.codigo,
+                ' dni: ', l^.datoL.dni,
+                ' fecha: ', l^.datoL.f.dia, '/', l^.datoL.f.mes, '/', l^.datoL.f.anio,
+                ' mondo: ', l^.datoL.mondo:2:2)
+        l:= l^.sig;
+    end;
+end;
+
+procedure imprimirVectorListas(v: vector);
+var
+    i: cantPuestos;
+begin
+    for i:= 1 to puesto do begin
+        writeln('');
+        writeln('Puesto nro: ', i, '-------------------------------------------------');
+        if (v[i] <> nil) then begin
+            imprimirListas(v[i]);
+        end else
+            writeln('no hay.');
+        end;
+    end;
+end;
+
 
 procedure leer(var c: compras);
 var
@@ -58,7 +94,7 @@ begin
     c.monto:= random(35000);
 end;
 
-procedure agregarOrdenado(var l: lista; c: compras);
+procedure agregarOrdenadoLista(var l: lista; c: compras);
 var
     anterior, actual, nuevo = lista;
 begin
@@ -84,16 +120,48 @@ var
     l: lista;
 begin
     randomize;
-    for i:= 0 to 10 do
+    for i:= 1 to 100 do begin
         leer(c)
-        agregarOrdenado(v[c.puesto], c)
+        agregarOrdenadoLista(v[c.puesto], c)
     end;
 end;
 
 
+procedure agregarOrdenadoArbol(params);
+begin
+    
+end;
+
+procedure minimo(params);
+begin
+    
+end;
+
+procedure merge(params);
+begin
+    
+end;
+
 
 var
-
+    v: vector;
+    abb: arbol;
+    mondo: real;
+    cant: integer;
 BEGIN
-    
+    inicializar(v);
+    cargar(v);
+    writeln('');
+    writeln('Se imprime el vector de listas.');
+    imprimirVectorListas(v);
+
+    merge(abb, v);
+    writeln('Lista mergeadas');
+    imprimirMerge(abb);
+
+    monto:= 900;
+    writeln('Calcular cant de clientes con monto total superior a: ', monto:2:2)
+    cant:= 0;
+    calcularCant(abb, cant, monto);
+    writeln('La cant es: ', cant);
 END;
