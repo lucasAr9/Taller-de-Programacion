@@ -32,7 +32,7 @@ vector = array [cantPuestos] of lista;
 // arbol de los clientes con los datos de los montos acumulados
 arbol = ^nodoArbol;
 nodoArbol = record
-    datoA = cliente;
+    datoA: compraPorCliente;
     hijoI: arbol;
     hijoD: arbol;
 end;
@@ -59,7 +59,7 @@ begin
                 ' codigo: ', l^.datoL.codigo,
                 ' dni: ', l^.datoL.dni,
                 ' fecha: ', l^.datoL.f.dia, '/', l^.datoL.f.mes, '/', l^.datoL.f.anio,
-                ' mondo: ', l^.datoL.mondo:2:2)
+                ' monto: ', l^.datoL.monto:2:2);
         l:= l^.sig;
     end;
 end;
@@ -73,7 +73,8 @@ begin
         writeln('Puesto nro: ', i, '-------------------------------------------------');
         if (v[i] <> nil) then begin
             imprimirListas(v[i]);
-        end else
+        end
+        else begin
             writeln('no hay.');
         end;
     end;
@@ -96,10 +97,10 @@ end;
 
 procedure agregarOrdenadoLista(var l: lista; c: compras);
 var
-    anterior, actual, nuevo = lista;
+    anterior, actual, nuevo: lista;
 begin
     new(nuevo);
-    nuevo^datoL:= c;
+    nuevo^.datoL:= c;
 
     actual:= l;
     while (actual^.sig <> nil) and (actual^.datoL.codigo <= c.codigo) do begin
@@ -108,7 +109,7 @@ begin
     end;
 
     if (actual = l) then
-        l:= nuevl;
+        l:= nuevo
     else
         anterios^.sig:= nuevo;
     nuevo^.sig:= actual;
@@ -121,34 +122,87 @@ var
 begin
     randomize;
     for i:= 1 to 100 do begin
-        leer(c)
-        agregarOrdenadoLista(v[c.puesto], c)
+        leer(c);
+        agregarOrdenadoLista(v[c.puesto], c);
     end;
 end;
 
 
-procedure agregarOrdenadoArbol(params);
+procedure agregarOrdenadoArbol(var abb: arbol; c: compras; montoTotal: real);
 begin
-    
+    if (abb = nil) then begin
+        new(abb);
+        abb^.datoA.dni = c^.dni;
+        abb^.datoA.monto = c^.monto;
+        abb^.hijoI:= nil;
+        abb^.hijoD:= nil;
+    end
+    else begin
+        if (c^.monto < abb^.datoA.monto) then
+            agregarOrdenadoArbol(abb^.hijoI, c, montoTotal)
+        else
+            agregarOrdenadoArbol(abb^.hijoD, c, montoTotal);
+    end;
 end;
 
-procedure minimo(params);
+// revisar la variable "min"
+procedure minimo(var min: compras; var monto: real; var v: vector);
+var
+    i, pos: integer;
 begin
-    
+    min:= 999;
+    monto:= 0;
+    pos:= -1;
+
+    for i:= 1 to puesto do begin
+        if (v[i] <> nil) and (v[i]^datoL.codigo <= min) then begin
+            min:= v[i];
+            pos:= i;
+        end;
+    end;
+
+    if (pos <> -1) then begin
+        monto:= v[pos]^datoL.monto;
+        v[pos]:= v[pos]^sig;
+    end;
 end;
 
-procedure merge(params);
+procedure merge(var abb: arbol; v: vector);
+var
+    actual, min: compras;
+    montoTotal, monto: real;
 begin
-    
+    minimo(min, monto, v);
+    while (min <> 999) do begin
+        actual:= min;
+        montoTotal:= 0;
+        while (min <> 999) and (actual = min) do begin
+            montoTotal:= montoTotal + monto;
+            minimo(min, monto, v);
+        end;
+        agregarOrdenadoArbol(abb, actual, montoTotal);
+    end;
+end;
+
+
+procedure calcularCant(abb: arbol; var cant: integer; monto: real);
+begin
+    if (abb <> nil) then
+        calcularCant(abb^.hijoI, cant, monto);
+        calcularCant(abb^.hijoD, cant, monto);
+        if (abb^.datoA.monto > monto) then
+            cant:= cant + 1;
 end;
 
 
 var
     v: vector;
     abb: arbol;
-    mondo: real;
+    monto: real;
     cant: integer;
 BEGIN
+    abb:= nil;
+
     inicializar(v);
     cargar(v);
     writeln('');
@@ -164,4 +218,4 @@ BEGIN
     cant:= 0;
     calcularCant(abb, cant, monto);
     writeln('La cant es: ', cant);
-END;
+END.

@@ -1,0 +1,99 @@
+programa Ej-2-a
+
+procesos
+  proceso movimiento (E n: numero; ES flores: numero)
+  comenzar
+    repetir n
+      mover 
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores:= flores + 1
+  fin
+  
+  proceso rectangulo (E alto: numero; E ancho: numero; ES flores: numero)
+  comenzar
+    repetir 2
+      movimiento(alto, flores)
+      derecha
+      movimiento(ancho, flores)
+      derecha
+  fin
+  
+  proceso actualizarMaximo(E f: numero; E id: numero; ES max: numero; ES idMax: numero)
+  comenzar
+    si (f > max)
+      max:= f
+      idMax:= id
+  fin
+   
+areas
+  ciudad1: AreaP(1,1,4,6)
+  ciudad2: AreaP(5,1,7,9)
+  ciudad3: AreaP(100,100,100,100)
+  
+robots
+  
+  
+  robot tipo1
+  variables
+    alto: numero
+    ancho: numero
+    flores: numero
+    quienSoy: numero
+  comenzar
+    flores:= 0
+    
+    RecibirMensaje(quienSoy, robot3)
+    
+    RecibirMensaje(alto, robot3)
+    RecibirMensaje(ancho, robot3)
+    rectangulo(alto, ancho, flores)
+    
+    EnviarMensaje(quienSoy, robot3)
+    EnviarMensaje(flores, robot3)
+  fin
+  
+  
+  robot tipo2
+  variables
+    flores, id: numero
+    fMax, idMax: numero
+  comenzar
+    fMax:= -1
+    
+    EnviarMensaje(1, robot1)
+    EnviarMensaje(2, robot2)
+    
+    EnviarMensaje(5, robot1)
+    EnviarMensaje(3, robot1)
+    
+    EnviarMensaje(8, robot2)
+    EnviarMensaje(2, robot2)
+    
+    repetir 2
+      RecibirMensaje(id, *)
+      
+      si (id = 1)
+        RecibirMensaje(flores, robot1)
+      sino
+        RecibirMensaje(flores, robot2)
+        
+      actualizarMaximo(flores, id, fMax, idMax)      
+
+    Informar(fMax)
+    Informar('Robot', idMax, 'es el maximo')
+  fin
+  
+  
+variables
+  robot1: tipo1
+  robot2: tipo1
+  robot3: tipo2
+comenzar
+  AsignarArea(robot1, ciudad1)
+  AsignarArea(robot2, ciudad2)
+  AsignarArea(robot3, ciudad3)
+  Iniciar(robot1, 1, 1)
+  Iniciar(robot2, 5, 1)
+  Iniciar(robot3, 100, 100)
+fin

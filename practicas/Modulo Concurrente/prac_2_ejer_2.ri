@@ -1,0 +1,91 @@
+programa nombrePrograma
+
+procesos
+  proceso juntar (ES flor: numero; ES papel: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:= flor + 1
+
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papel:= papel + 1
+  fin
+
+  proceso recorrer (ES flor: numero; ES papel: numero)
+  variables
+    pasos: numero
+  comenzar
+    juntar (flor, papel)
+    mover
+    derecha
+
+    Random (pasos, 1, 5)
+    repetir pasos
+      juntar (flor, papel)
+      mover
+  fin
+
+  proceso evaluarFyP (ES cantMasF: numero; E flor: numero; E papel: numero)
+  comenzar
+    si (flor > papel)
+      cantMasF:= cantMasF + 1
+  fin
+
+areas
+  ciudad: AreaC (1,1,35,5)
+
+
+robots
+  robot tipo1
+  variables
+    flor, papel: numero
+    cantMasF: numero
+  comenzar
+    cantMasF:= 0
+
+    repetir 4
+      flor:= 0
+      papel:= 0
+
+      recorrer (flor, papel)
+
+      evaluarFyP (cantMasF, flor, papel)
+
+      repetir 3
+        derecha
+
+    EnviarMensaje (cantMasF, jefe)
+  fin
+
+
+  robot tipo2
+  variables
+    cantTot, cant: numero
+  comenzar
+    cantTot:= 0
+    cant:= 0
+    
+    repetir 3
+      RecibirMensaje (cant, *)
+      cantTot:= cantTot + cant
+    
+    Informar ('total', cantTot)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  jefe: tipo2
+comenzar
+  AsignarArea (r1, ciudad)
+  AsignarArea (r2, ciudad)
+  AsignarArea (r3, ciudad)
+  AsignarArea (jefe, ciudad)
+  Iniciar (r1,2,1)
+  Iniciar (r2,7,1)
+  Iniciar (r3,12,1)
+  Iniciar (jefe,1,1)
+fin

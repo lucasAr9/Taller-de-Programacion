@@ -1,0 +1,93 @@
+programa nombrePrograma
+
+procesos
+  proceso juntarF (ES flor: numero)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flor:= flor + 1
+  fin
+
+  proceso juntarP (ES papel: numero)
+  comenzar
+    si (HayPapelEnLaEsquina)
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papel:= papel + 1
+  fin
+
+  proceso dejarF (ES flor: numero)
+  comenzar
+    repetir flor
+      depositarFlor
+      flor:= flor - 1
+  fin
+
+  proceso dejarP (ES papel: numero)
+  comenzar
+    repetir papel
+      depositarPapel
+      papel:= papel - 1
+  fin
+
+  proceso recorrer20EsquFlor
+  variables
+    flor: numero
+  comenzar
+    flor:= 0
+    repetir 20
+      juntarF (flor)
+      mover
+    dejarF (flor)
+  fin
+
+  proceso recorrer20EsquPapel
+  variables
+    papel: numero
+  comenzar
+    papel:= 0
+    repetir 20
+      juntarP (papel)
+      mover
+    dejarP (papel)
+  fin
+
+
+areas
+  ciudad: AreaC (1,1,100,100)
+
+
+robots
+  robot robot1
+  comenzar
+    derecha
+    repetir 2
+      recorrer20EsquFlor
+      Pos(PosAv - 20, PosCa + 5)
+  fin
+
+
+  robot robot2
+  comenzar
+    repetir 2
+      recorrer20EsquPapel
+      Pos(PosAv + 5, PosCa - 20)
+  fin
+
+
+variables
+  Rinfo1: robot1
+  Rinfo2: robot2
+  Rinfo3: robot1
+  Rinfo4: robot2
+comenzar
+  AsignarArea (Rinfo1,ciudad)
+  AsignarArea (Rinfo2,ciudad)
+  AsignarArea (Rinfo3,ciudad)
+  AsignarArea (Rinfo4,ciudad)
+  Iniciar (Rinfo1,1,75)
+  Iniciar (Rinfo2,75,80)
+  Iniciar (Rinfo3,80,10)
+  Iniciar (Rinfo4,10,1)
+fin

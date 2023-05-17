@@ -1,0 +1,170 @@
+programa nombrePrograma
+
+procesos
+  proceso juntarF (ES flor: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flor:= flor +1
+  fin
+
+  proceso juntarP (ES papel: numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      papel:= papel +1
+  fin
+
+  proceso caminar (E pas: numero)
+  comenzar
+    repetir pas
+      mover
+  fin
+
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+
+  { ESQUINAS ESPECIALES TANTO PARA JUNTAR FLOR COMO PARA PAPEL }
+  proceso esquinaEspecialFlor (ES f: numero)
+  comenzar
+    mover
+    juntarF (f)
+    derecha
+
+    BloquearEsquina (15, 1)
+    mover
+    juntarF (f)
+    repetir 2
+      derecha
+    EnviarMensaje (1, jefe)
+    mover
+    LiberarEsquina (15, 1)
+  fin
+
+  proceso esquinaEspecialPapel (ES p: numero)
+  comenzar
+    mover
+    juntarP (p)
+    izquierda
+    
+    BloquearEsquina (15, 1)
+    mover
+    juntarP (p)
+    repetir 2
+      derecha
+    EnviarMensaje (2, jefe)
+    mover
+    LiberarEsquina (15, 1)
+  fin
+
+  { MODULOS PARA HACER ESCALON HACIA ARRIBA JUNTANDO FLORES Y OTRO PARA ARRIBA JUNTANDO PAPELE  }
+  proceso hacerEscalonesFlores (ES pasos: numero; ES flor: numero; E sumaResta: boolean)
+  comenzar
+    repetir 4
+      caminar (pasos)
+      juntarF (flor)
+      derecha
+      caminar (pasos)
+      izquierda
+      juntarF (flor)
+
+      si (sumaResta = V)
+        pasos:= pasos -1
+      sino
+        pasos:= pasos +1
+  fin
+
+  proceso hacerEscalonesPapeles (ES pasos: numero; ES papel: numero; E sumaResta: boolean)
+  comenzar
+    repetir 4
+      caminar (pasos)
+      juntarP (papel)
+      izquierda
+      caminar (pasos)
+      derecha
+      juntarP (papel)
+
+      si (sumaResta = V)
+        pasos:= pasos -1
+      sino
+        pasos:= pasos +1
+  fin
+
+areas
+  ciudad: AreaPC (1,1,31,30)
+
+
+robots
+  robot tipo1 { que junta flores }
+  variables
+    pasos, flor: numero
+    sumaResta: boolean
+  comenzar
+    flor:= 0
+    pasos:= 5
+    sumaResta:= V
+    hacerEscalonesFlores (pasos, flor, sumaResta)
+
+    esquinaEspecialFlor (flor)
+
+    pasos:= 2
+    sumaResta:= F
+    hacerEscalonesFlores (pasos, flor, sumaResta)
+
+    Informar ('flores', flor)
+    EnviarMensaje (sumaResta, jefe)
+  fin
+
+
+  robot tipo2 { que junta papeles }
+  variables
+    pasos, papel: numero
+    sumaResta: boolean
+  comenzar
+    papel:= 0
+    pasos:= 5
+    sumaResta:= V
+    hacerEscalonesPapeles (pasos, papel, sumaResta)
+
+    esquinaEspecialPapel (papel)
+
+    pasos:= 2
+    sumaResta:= F
+    hacerEscalonesPapeles (pasos, papel, sumaResta)
+
+    Informar ('papeles', papel)
+    EnviarMensaje (sumaResta, jefe)
+  fin
+
+
+  robot tipo3
+  variables
+    primero, segundo: numero
+    terminaronRecorrido: boolean
+  comenzar
+    RecibirMensaje (primero, *)
+    RecibirMensaje (segundo, *)
+
+    RecibirMensaje (terminaronRecorrido, *)
+    RecibirMensaje (terminaronRecorrido, *)
+
+    Informar ('ganador', primero)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo2
+  jefe: tipo3
+comenzar
+  AsignarArea (r1, ciudad)
+  AsignarArea (r2, ciudad)
+  AsignarArea (jefe, ciudad)
+
+  Iniciar (r1, 1, 1)
+  Iniciar (r2, 31, 1)
+  Iniciar (jefe, 15, 1)
+fin

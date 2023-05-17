@@ -1,0 +1,167 @@
+programa nombrePrograma_4p2
+
+procesos
+  proceso juntarTodo (ES flor: numero; ES papel: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:= flor + 1
+
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papel:= papel + 1
+  fin
+
+  proceso calcular (E flor: numero; E papel: numero; E nRobot: numero; ES max: numero; ES robMax: numero)
+  variables
+    total: numero
+  comenzar
+    total:= 0
+    total:= flor + papel
+
+    si (total > max)
+      max:= total
+      robMax:= nRobot
+  fin
+
+areas
+  ciudad1: AreaPC (25,25,75,75) { mal las areas, poner inicio en privado cada uno }
+  ciudad2: AreaPC (25,1,40,1)
+  ciudadJefe: AreaP (1,1,1,1)
+
+
+robots
+  robot tipo1
+  variables
+    termino: numero
+    numJugador: numero
+    origenAv, calle, avenida: numero
+    flor, papel: numero
+  comenzar
+    termino:= -1
+    flor:= 0
+    papel:= 0
+
+    {recibir numero de jugador y su pos de inicio}
+    RecibirMensaje (numJugador, jefe)
+    RecibirMensaje (origenAv, jefe)
+    Pos (origenAv, 1)
+
+		RecibirMensaje (termino, jefe)
+    
+    mientras ~(termino = 0)
+      {calcular esquina random}
+      Random (avenida, 25, 75)
+      Random (calle, 25, 75)
+      {ir a la pos y juntar todo}
+      Pos (avenida, calle)
+      juntarTodo (flor, papel)
+      {decirle al jefe que termino de juntar en la esquina}
+      Pos (origenAv, 1)
+      EnviarMensaje (termino, jefe)
+      
+      RecibirMensaje (termino, jefe)
+    {end;}
+
+    EnviarMensaje (numJugador, jefe)
+    EnviarMensaje (flor, jefe)
+    EnviarMensaje (papel, jefe)
+  fin
+
+
+  robot tipo2
+  variables
+    numR: numero
+    flor, papel: numero
+    max, robMax: numero
+  comenzar
+    max:= 0
+    robMax:= 0
+
+    {enviar numero de jugador y la pos de inicio}
+    EnviarMensaje (1, r1)
+    EnviarMensaje (25, r1)
+
+    EnviarMensaje (2, r2)
+    EnviarMensaje (30, r2)
+
+    EnviarMensaje (3, r3)
+    EnviarMensaje (35, r3)
+
+    EnviarMensaje (4, r4)
+    EnviarMensaje (40, r4)
+
+    repetir 10
+      {enviar la señal de cual robot puede ingresar}
+      Random (numR, 1, 4)
+      si (numR = 1)
+        EnviarMensaje (numR, r1)
+      sino
+        si (numR = 2)
+          EnviarMensaje (numR, r2)
+        sino
+          si (numR = 3)
+            EnviarMensaje (numR, r3)
+          sino
+            si (numR = 4)
+              EnviarMensaje (numR, r4)
+
+      RecibirMensaje (numR, *)
+    {end;}
+    
+    {enviar señal de que se termino el juego}
+    numR:= 0
+    EnviarMensaje (numR, r1)
+    EnviarMensaje (numR, r2)
+    EnviarMensaje (numR, r3)
+    EnviarMensaje (numR, r4)
+
+    {calcular el ganador}
+    repetir 4
+      RecibirMensaje (numR, *)
+      si (numR = 1)
+        RecibirMensaje (flor, r1)
+        RecibirMensaje (papel, r1)
+      sino
+        si (numR = 2)
+          RecibirMensaje (flor, r2)
+          RecibirMensaje (papel, r2)
+        sino
+          si (numR = 3)
+            RecibirMensaje (flor, r3)
+            RecibirMensaje (papel, r3)
+          sino
+            si (numR = 4)
+              RecibirMensaje (flor, r4)
+              RecibirMensaje (papel, r4)
+              
+      calcular (flor, papel, numR, max, robMax)
+    {end;}
+
+    Informar ('ganador', robMax)
+    Informar ('con', max)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  jefe: tipo2
+comenzar
+  AsignarArea (r1, ciudad1)
+  AsignarArea (r1, ciudad2)
+  AsignarArea (r2, ciudad1)
+  AsignarArea (r2, ciudad2)
+  AsignarArea (r3, ciudad1)
+  AsignarArea (r3, ciudad2)
+  AsignarArea (r4, ciudad1)
+  AsignarArea (r4, ciudad2)
+  AsignarArea (jefe, ciudadJefe)
+  Iniciar (r1,25,1)
+  Iniciar (r2,30,1)
+  Iniciar (r3,35,1)
+  Iniciar (r4,40,1)
+  Iniciar (jefe,1,1)
+fin

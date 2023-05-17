@@ -1,0 +1,127 @@
+programa nombrePrograma
+
+procesos
+  proceso juntarF (ES hayFlor: boolean)
+  comenzar
+    si HayFlorEnLaEsquina
+      tomarFlor
+    sino
+      hayFlor:= F
+  fin
+
+  proceso saltarEsquinas (ES hayFlor: boolean; E av: numero; E ca: numero)
+  comenzar
+    mientras (hayFlor = V)
+      BloquearEsquina (10, 10)
+      Pos (10, 10)
+      juntarF (hayFlor)
+      Pos (av, ca)
+      LiberarEsquina (10, 10)
+
+      BloquearEsquina (11, 11)
+      Pos (11, 11)
+      si (hayFlor = V)
+        depositarFlor
+      Pos (av, ca)
+      LiberarEsquina (11, 11)
+  fin
+
+  proceso evaluar (E hayFlor: boolean)
+  comenzar
+    si (hayFlor = V)
+      Pos (11, 11)
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+  fin
+
+areas
+  dondeJuntar: AreaPC (10,10,10,10)
+  dondeDejar: AreaPC (11,11,11,11)
+  areaPrivadaJefe: AreaP (1,1,1,1)
+  inir1: AreaP (9,9,9,9)
+  inir2: AreaP (9,10,9,10)
+  inir3: AreaP (9,11,9,11)
+  inir4: AreaP (9,12,9,12)
+
+
+robots
+  robot tipo1
+  variables
+    hayFlor: boolean
+    iniAv, iniCa: numero
+    id: numero
+  comenzar
+    hayFlor:= V
+    iniAv:= PosAv
+    iniCa:= PosCa
+
+    RecibirMensaje (id, jefe)
+
+    saltarEsquinas (hayFlor, iniAv, iniCa)
+
+    EnviarMensaje (id, jefe)
+
+    RecibirMensaje (hayFlor, jefe)
+    evaluar (hayFlor)
+  fin
+
+
+  robot tipo2
+  variables
+    num, id: numero
+  comenzar
+    EnviarMensaje (1, r1)
+    EnviarMensaje (2, r2)
+    EnviarMensaje (3, r3)
+    EnviarMensaje (4, r4)
+    
+    num:= 0
+    repetir 4
+      num:= num +1
+
+      RecibirMensaje (id, *)
+      si (id = 1)
+        EnviarMensaje (num = 4, r1)
+      sino
+        si (id = 2)
+          EnviarMensaje (num = 4, r2)
+        sino
+          si (id = 3)
+            EnviarMensaje (num = 4, r3)
+          sino
+            si (id = 4)
+              EnviarMensaje (num = 4, r4)
+
+    Informar ('ultimo', id)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  jefe: tipo2
+comenzar
+  AsignarArea (r1,dondeJuntar)
+  AsignarArea (r1,dondeDejar)
+  AsignarArea (r2,dondeJuntar)
+  AsignarArea (r2,dondeDejar)
+  AsignarArea (r3,dondeJuntar)
+  AsignarArea (r3,dondeDejar)
+  AsignarArea (r4,dondeJuntar)
+  AsignarArea (r4,dondeDejar)
+
+  AsignarArea (r1,inir1)
+  AsignarArea (r2,inir2)
+  AsignarArea (r3,inir3)
+  AsignarArea (r4,inir4)
+
+  AsignarArea (jefe,areaPrivadaJefe)
+
+  Iniciar (r1,9,9)
+  Iniciar (r2,9,10)
+  Iniciar (r3,9,11)
+  Iniciar (r4,9,12)
+  Iniciar (jefe,1,1)
+fin
