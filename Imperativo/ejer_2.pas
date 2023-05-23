@@ -54,7 +54,7 @@ begin
     nuevo^.datoL:= e;
 
     actual:= l;
-    while (actual <> nil) and (actual^.datoL.localidad <= nuevo^.datoL.localidad) then begin
+    while (actual <> nil) and (actual^.datoL.localidad <= e.localidad) then begin
         anterior:= actual;
         actual:= actual^.sig;
     end;
@@ -88,4 +88,6 @@ BEGIN
     cargar(v);
     writeln('Imprimir el vector de listas');
     imprimirVectorListas(v);
+
+	
 END.
