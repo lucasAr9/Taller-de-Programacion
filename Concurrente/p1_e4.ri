@@ -1,0 +1,80 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntar (ES j: numero; E que_juntar: boolean)
+  comenzar
+    si (que_juntar = F)
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        j:= j + 1
+    sino
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        j:= j + 1
+  fin
+
+
+areas
+  area1: AreaPC (1, 1, 25, 100)
+  area2: AreaP (26, 1, 50, 100)
+  area3: AreaP (51, 1, 75, 100)
+  area4: AreaP (76, 1, 100, 100)
+
+
+robots
+  robot tipo1
+  variables
+    j: numero
+    av: numero
+    que_juntar: boolean {F = flores, V = papeles}
+  comenzar
+    que_juntar:= F
+    av:= 0
+    RecibirMensaje (que_juntar, jefe)
+    RecibirMensaje (av, jefe)
+
+    repetir 2
+      repetir 24
+        av:= av + 1
+        Pos (av, 1)
+        repetir 99
+          juntar (j, que_juntar)
+          mover
+        juntar (j, que_juntar)
+      av:= av + 1
+      Pos (av, 1)
+      repetir 99
+        juntar (j, que_juntar)
+        mover
+      juntar (j, que_juntar)
+      av:= av + 25
+  fin
+
+  robot tipo2
+  comenzar
+    EnviarMensaje (F, r1)
+    EnviarMensaje (V, r2)
+    EnviarMensaje (0, r1)
+    EnviarMensaje (25, r2)
+    repetir 20
+      mover
+      derecha
+    Pos (1, 1)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  jefe: tipo2
+comenzar
+  AsignarArea (r1, area1)
+  AsignarArea (r1, area3)
+  AsignarArea (r2, area2)
+  AsignarArea (r2, area4)
+  AsignarArea (jefe, area1)
+  Iniciar (r1, 1, 1)
+  Iniciar (r2, 26, 1)
+  Iniciar (jefe, 5, 5)
+fin

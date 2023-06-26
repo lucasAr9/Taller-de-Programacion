@@ -97,8 +97,7 @@ end;
 
 
 // Hacer merge acumulador de los vectores generando una lista.
-
-procedure minimo(var min, monto: integer; var v: vector; var vDLActual: vectorDL; vDL: vectorDL);
+procedure minimo(var min, monto: integer; var v: vector; var vDLActual, vDL: vectorDL);
 var
 	i, pos: integer;
 begin

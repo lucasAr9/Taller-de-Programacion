@@ -1,0 +1,21 @@
+(x, y)
+      y
+        y
+        y
+        y
+        y
+x x x x x x x x x
+        y        x
+        y
+        y
+
+(av, ca)
+      ca
+	ca
+	ca
+	ca
+	ca
+av av av av av av av
+	ca         av
+	ca
+	ca

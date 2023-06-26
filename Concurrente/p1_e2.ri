@@ -1,0 +1,67 @@
+programa nombrePrograma
+
+procesos
+  proceso juntarP (ES papel: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papel:= papel + 1
+  fin
+
+areas
+  lado: AreaPC (10,10,30,30)
+  nada: AreaP (1,1,1,1)
+
+robots
+  robot tipo1
+  variables
+    papeles: numero
+    id: numero
+  comenzar
+    papeles:= 0
+    RecibirMensaje (id, coordinador)
+
+    si (id = 2)
+      derecha
+    sino
+      si (id = 3)
+        derecha
+        derecha
+      sino
+        si (id = 4)
+          derecha
+          derecha
+          derecha
+    {end;}
+
+    repetir 20
+      juntarP (papeles)
+      mover
+  fin
+
+  robot tipo2
+  comenzar
+    EnviarMensaje (1, r1)
+    EnviarMensaje (2, r2)
+    EnviarMensaje (3, r3)
+    EnviarMensaje (4, r4)
+  fin
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  coordinador: tipo2
+comenzar
+  AsignarArea (r1,lado)
+  AsignarArea (r2,lado)
+  AsignarArea (r3,lado)
+  AsignarArea (r4,lado)
+  AsignarArea (coordinador, nada)
+  Iniciar (r1,10,10)
+  Iniciar (r2,10,30)
+  Iniciar (r3,30,30)
+  Iniciar (r4,30,10)
+  Iniciar (coordinador,1,1)
+fin

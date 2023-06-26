@@ -1,0 +1,73 @@
+programa nombrePrograma
+
+
+procesos
+  proceso contar (ES flores: numero; ES papeles: numero)
+  comenzar
+    si HayFlorEnLaEsquina
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        flores:= flores + 1
+      mientras HayFlorEnLaBolsa
+        depositarFlor
+
+    si HayPapelEnLaEsquina
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        papeles:= papeles + 1
+      mientras HayPapelEnLaBolsa
+        depositarPapel
+  fin
+
+  proceso calcular (ES pasos: numero; ES escalones: numero)
+  variables
+    flor: numero
+    papel: numero
+  comenzar
+    flor:= 0
+    papel:= 0
+    repetir 2
+      repetir pasos
+        contar (flor, papel)
+        mover
+      derecha
+    si (papel - flor = 1)
+      escalones:= escalones + 1
+  fin
+
+
+areas
+  area: AreaP (1,1,100,100)
+
+
+robots
+  robot tipo1
+  variables
+    pasos: numero
+    escalonesQueSuperan: numero
+  comenzar
+    pasos:= 1
+    escalonesQueSuperan:= 0
+
+    repetir 4
+      calcular (pasos, escalonesQueSuperan)
+      derecha
+      derecha
+      pasos:= pasos + pasos
+
+    Informar (escalonesQueSuperan)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+comenzar
+  AsignarArea(r1, area)
+  AsignarArea(r2, area)
+  AsignarArea(r3, area)
+  Iniciar(r1, 12, 14)
+  Iniciar(r2, 17, 10)
+  Iniciar(r3, 22, 6)
+fin
