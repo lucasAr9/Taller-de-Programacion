@@ -1,0 +1,106 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntarF (ES flores: numero)
+  comenzar
+    si HayFlorEnLaEsquina
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        flores:= flores + 1
+  fin
+
+
+  proceso juntarP (ES papeles: numero)
+  comenzar
+    si HayPapelEnLaEsquina
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        papeles:= papeles + 1
+  fin
+
+
+  proceso moverA (ES papeles: numero)
+  comenzar
+    repetir 9
+      juntarP (papeles)
+      mover
+    juntarP (papeles)
+  fin
+
+
+  proceso moverB (ES flores: numero)
+  comenzar
+    repetir 9
+      juntarP (flores)
+      mover
+    juntarP (flores)
+  fin
+
+
+areas
+  ciudadA: areaPC (1, 1, 40, 1)
+  ciudadB: areaPC (1, 5, 40, 5)
+
+
+robots
+  robot tipoA1
+  variables
+    papeles, papelesOtro: numero
+  comenzar
+    papeles:= 0
+    derecha
+
+    moverA (papeles)    
+
+    EnviarMensaje (papeles, a2)
+
+    RecibirMensaje (papelesOtro)
+  fin
+
+
+  robot tipoA2
+  variables
+
+  comenzar
+
+  fin
+
+
+  {Equipo B, junta flores}
+  robot tipoB1
+  variables
+    flores: numero
+  comenzar
+    flores:= 0
+    derecha
+
+    moverA (flores)    
+
+    EnviarMensaje (flores, a2)
+  fin
+
+
+  robot tipoB2
+  variables
+
+  comenzar
+
+  fin
+
+
+variables
+  a1: tipoA1
+  a2: tipoA2
+  b1: tipoB1
+  b2: tipoB2
+comenzar
+  AsignarArea (a1, ciudadA)
+  AsignarArea (a2, ciudadA)
+  AsignarArea (b1, ciudadB)
+  AsignarArea (b2, ciudadB)
+  Iniciar (a1, 1, 1)
+  Iniciar (a2, 11, 1)
+  Iniciar (b1, 1, 5)
+  Iniciar (b2, 11, 5)
+fin

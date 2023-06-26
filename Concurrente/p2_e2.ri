@@ -1,0 +1,82 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntarTodo (ES flores: numero; ES papeles: numero)
+  comenzar
+    si HayFlorEnLaEsquina
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        flores:= flores + 1
+    si HayPapelEnLaEsquina
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        papeles:= papeles + 1
+  fin
+
+
+  proceso calcularMasFqueP (ES flores: numero; ES papeles: numero; ES masFqueP: numero)
+  comenzar
+    si (flores > papeles)
+      masFqueP:= masFqueP + 1
+  fin
+
+
+areas
+  ciudad: areaC (1, 1, 100, 100)
+
+
+robots
+  robot tipo1
+  variables
+    flores, papeles, masFqueP: numero
+  comenzar
+  masFqueP:= 0
+
+    repetir 4
+      flores:= 0
+      papeles:= 0
+      Random (pasos, 1, 5)
+      repetir pasos
+        juntarTodo (flores, papeles)
+        mover
+      derecha
+      juntarTodo (flores, papeles)
+      mover
+      calcularMasFqueP (flores, papeles, masFqueP)
+      repetir 3
+        derecha
+
+    EnviarMensaje (masFqueP, jefe)
+  fin
+
+
+  robot tipo2
+  variables
+    cantTotal, cantActual: numero
+  comenzar
+    cantTotal:= 0
+
+    repetir 3
+      RecibirMensaje (cantActual, *)
+      cantTotal:= cantTotal + cantActual
+
+    Informar ('total_escalones_mas_flores_que_papeles', cantTotal)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  jefe: tipo2
+comenzar
+  AsignarArea (r1, ciudad)
+  AsignarArea (r2, ciudad)
+  AsignarArea (r3, ciudad)
+  AsignarArea (jefe, ciudad)
+  Iniciar (r1, 2, 1)
+  Iniciar (r2, 7, 1)
+  Iniciar (r3, 12, 1)
+  Iniciar (jefe, 1, 1)
+fin
