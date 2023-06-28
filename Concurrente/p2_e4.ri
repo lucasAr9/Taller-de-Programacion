@@ -1,0 +1,143 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntar (ES flores: numero; ES papeles: numero)
+  comenzar
+    si HayFlorEnLaEsquina
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        flores:= flores + 1
+    si HayPapelEnLaEsquina
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        papeles:= papeles + 1
+  fin
+
+
+  proceso calcularGanador (E id: numero; E total: numero; ES idMax: numero; ES totalMax: numero)
+  comenzar
+    si (total > totalMax)
+      idMax:= id
+      totalMax:= total
+  fin
+
+
+areas
+  ciudad: areaC (25, 25, 75, 75)
+  areaJ: areaP (1, 1, 1, 1)
+  area1: areaP (25, 1, 25, 1)
+  area2: areaP (30, 1, 30, 1)
+  area3: areaP (35, 1, 35, 1)
+  area4: areaP (40, 1, 40, 1)
+
+
+robots
+  robot tipoJ
+  variables
+    id, total: numero
+    idMax, totalMax: numero
+  comenzar
+    EnviarMensaje (1, r1)
+    EnviarMensaje (2, r2)
+    EnviarMensaje (3, r3)
+    EnviarMensaje (4, r4)
+
+    idMax:= 0
+    totalMax:= 0
+
+    repetir 10
+      Random (id, 1, 4)
+      si (id = 1)
+        EnviarMensaje (1, r1)
+      sino
+        si (id = 2)
+          EnviarMensaje (1, r2)
+        sino
+          si (id = 3)
+            EnviarMensaje (1, r3)
+          sino
+            si (id = 4)
+              EnviarMensaje (1, r4)
+      RecibirMensaje (id, *)
+    {end}
+
+    EnviarMensaje (0, r1)
+    EnviarMensaje (0, r2)
+    EnviarMensaje (0, r3)
+    EnviarMensaje (0, r4)
+
+    repetir 4
+      RecibitMensaje (id, *)
+      si (id = 1)
+        RecibirMensaje (total, r1)
+      sino
+        si (id = 2)
+          RecibirMensaje (total, r2)
+        sino
+          si (id = 3)
+            RecibirMensaje (total, r3)
+          sino
+            si (id = 4)
+              RecibirMensaje (total, r4)
+      calcularGanador (id, total, idMax, totalMax)
+    {end}
+
+    Informar ('ganador', idMax)
+    Informar ('con', totalMax)
+  fin
+
+
+  robot tipo1
+  variables
+    id, termino, flores, papeles: numero
+    av, ca, avInit, caInit: numero
+  comenzar
+    flores:= 0
+    papeles:= 0
+    avInit:= PosAv
+    caInit:= PosCa
+
+    RecibirMensaje (id, jefe)
+
+    RecibirMensaje (termino, jefe)
+    mientras (termino != 0)
+      Random (av, 25, 75)
+      Random (ca, 25, 75)
+      Pos (av, ca)
+      juntar (flores, papeles)
+      Pos (avInit, caInit)
+      EnviarMensaje (termino, jefe)
+      RecibirMensaje (termino, jefe)
+    {end}
+
+    flores:= flores + papeles
+    EnviarMensaje (id, jefe)
+    EnviarMensaje (flores, jefe)
+  fin
+
+
+variables
+  jefe: tipoJ
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+comenzar
+  AsignarArea (jefe, areaJ)
+  AsignarArea (r1, area1)
+  AsignarArea (r2, area2)
+  AsignarArea (r3, area3)
+  AsignarArea (r4, area4)
+
+  AsignarArea (r1, ciudad)
+  AsignarArea (r2, ciudad)
+  AsignarArea (r3, ciudad)
+  AsignarArea (r4, ciudad)
+
+  Iniciar (jefe, 1, 1)
+  Iniciar (r1, 25, 1)
+  Iniciar (r2, 30, 1)
+  Iniciar (r3, 35, 1)
+  Iniciar (r4, 40, 1)
+fin

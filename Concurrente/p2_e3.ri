@@ -46,24 +46,34 @@ areas
 robots
   robot tipoA1
   variables
-    papeles, papelesOtro: numero
+    papeles: numero
   comenzar
     papeles:= 0
     derecha
 
     moverA (papeles)    
-
     EnviarMensaje (papeles, a2)
-
-    RecibirMensaje (papelesOtro)
+    Pos (PosAv + 11, PosCa)
+    RecibirMensaje (papeles, a2)
+    moverA (papeles)
+    EnviarMensaje (papeles, a2)
   fin
 
 
   robot tipoA2
   variables
-
+    papeles: numero
   comenzar
+    papeles:= 0
+    derecha
 
+    RecibirMensaje (papeles, a1)
+    moverA (papeles)    
+    EnviarMensaje (papeles, a1)
+    Pos (PosAv + 11, PosCa)
+    RecibirMensaje (papeles, a1)
+    moverA (papeles)
+    Informar ('A', papeles)
   fin
 
 
@@ -76,16 +86,28 @@ robots
     derecha
 
     moverA (flores)    
-
-    EnviarMensaje (flores, a2)
+    EnviarMensaje (flores, b2)
+    Pos (PosAv + 11, PosCa)
+    RecibirMensaje (flores, b2)
+    moverA (flores)
+    EnviarMensaje (flores, b2)
   fin
 
 
   robot tipoB2
   variables
-
+    flores: numero
   comenzar
+    flores:= 0
+    derecha
 
+    RecibirMensaje (flores, b1)
+    moverA (flores)    
+    EnviarMensaje (flores, b1)
+    Pos (PosAv + 11, PosCa)
+    RecibirMensaje (flores, b1)
+    moverA (flores)
+    Informar ('A', flores)
   fin
 
 
