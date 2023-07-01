@@ -90,16 +90,21 @@ procedure pacientesDeOsde(var l: lista; abb:arbol; desde, hasta: integer);
 var
 	ultimo: lista;
 begin
-
-
-// este recorre todo el arbol, tengo que hacer que corte antes ya que el arbol esta ordenado.
-
-
-	if (abb <> nil) and (abb^.dato.codigo < hasta) then begin
-		pacientesDeOsde(abb^.hI);
-		if (abb^.dato.obraSocial = 3) and (abb^.dato.codigo > desde) then
-			agregarFinalLista(l, ultimo, abb^.dato);
-		pacientesDeOsde(abb^.hD);
+	if (abb <> nil) then
+		if (abb^.dato.codigo > desde) then begin
+			if (abb^.dato.codigo < hasta) then begin
+				pacientesDeOsde(l, abb^.hI, desde, hasta);
+				if (abb^.dato.obraSocial = 3) then
+					agregarFinalLista(l, ultimo, abb^.dato);
+				pacientesDeOsde(l, abb^.hD, desde, hasta);
+			end
+			else
+				pacientesDeOsde(l, abb^.hI, desde, hasta);
+			end;
+		end
+		else
+			pacientesDeOsde(l, abb^.hD, desde, hasta);
+		end;
 	end;
 end;
 
@@ -110,6 +115,16 @@ begin
 		aumentarAbono(abb^.hI, monto);
 		abb^.dato.costoAbono:= abb^.dato.costoAbono + monto;
 		aumentarAbono(abb^.hD, monto);
+	end;
+end;
+
+
+procedure imprimirABB(abb: arbol);
+begin
+	if (abb <> nil) then begin
+		imprimirABB(abb^.HI);
+		writeln('codigo: ', abb^.dato.codigo);
+		imprimirABB(abb^.HD);
 	end;
 end;
 
