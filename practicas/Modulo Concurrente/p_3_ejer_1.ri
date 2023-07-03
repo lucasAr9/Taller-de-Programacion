@@ -17,7 +17,6 @@ procesos
   proceso dejarFlor (ES f: numero; E av: numero; E ca: numero)
   comenzar
     BloquearEsquina (10, 10)
-
     Pos (10, 10)
     depositarFlor
     f:= f -1

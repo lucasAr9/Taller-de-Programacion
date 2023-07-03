@@ -1,0 +1,132 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntarF (ES flores: numero)
+  comenzar
+    si HayFlorEnLaEsquina
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        flores:= flores + 1
+  fin
+
+
+  proceso depositarF (ES flores: numero)
+  comenzar
+    si HayFlorEnLaBolsa
+      mientras HayFlorEnLaBolsa
+        depositarFlor
+        flores:= flores - 1
+  fin
+
+
+  proceso juntarP (ES papeles: numero)
+  comenzar
+    si HayPapelEnLaEsquina
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        papeles:= papeles + 1
+  fin
+
+
+  proceso depositarP (ES papeles: numero)
+  comenzar
+    si HayPapelEnLaBolsa
+      mientras HayPapelEnLaBolsa
+        depositarPapel
+        papeles:= papeles - 1
+  fin
+
+
+areas
+  ciudadF: AreaPC (1, 1, 5, 10)
+  ciudadP: AreaPC (6, 1, 10, 9)
+  ciudadFInit: AreaPC (6, 10, 7, 10)
+  ciudadPInit: AreaPC (8, 10, 9, 10)
+  ciudadDeposito: AreaC (10, 10, 10, 10)
+
+
+robots
+  robot tipoF
+  variables
+    flores: numero
+    avInit, caInit: numero
+    avRandom, caRandom: numero
+  comenzar
+    avInit:= PosAv
+    caInit:= PosCa
+    flores:= 0
+
+    repetir 5
+      Random (avRandom, 1, 5)
+      Random (caRandom, 1, 10)
+
+      BloquearEsquina (avRandom, caRandom)
+      Pos (avRandom, caRandom)
+      juntarF (flores)
+      Pos (avInit, caInit)
+      LiberarEsquina (avRandom, caRandom)
+    {end}
+
+    BloquearEsquina (10, 10)
+    Pos (10, 10)
+    depositarF (flores)
+    Pos (avInit, caInit)
+    LiberarEsquina (10, 10)
+  fin
+
+
+  robot tipoP
+  variables
+    papeles: numero
+    avInit, caInit: numero
+    avRandom, caRandom: numero
+  comenzar
+    avInit:= PosAv
+    caInit:= PosCa
+    papeles:= 0
+
+    repetir 3
+      Random (avRandom, 6, 10)
+      Random (caRandom, 1, 9)
+
+      BloquearEsquina (avRandom, caRandom)
+      Pos (avRandom, caRandom)
+      juntarP (papeles)
+      Pos (avInit, caInit)
+      LiberarEsquina (avRandom, caRandom)
+    {end}
+
+    BloquearEsquina (10, 10)
+    Pos (10, 10)
+    depositarP (papeles)
+    Pos (avInit, caInit)
+    LiberarEsquina (10, 10)
+  fin
+
+
+variables
+  rF1: tipoF
+  rF2: tipoF
+  rP1: tipoP
+  rP2: tipoP
+comenzar
+  AsignarArea (rF1, ciudadF)
+  AsignarArea (rF2, ciudadF)
+  AsignarArea (rF1, ciudadFInit)
+  AsignarArea (rF2, ciudadFInit)
+  AsignarArea (rF1, ciudadDeposito)
+  AsignarArea (rF2, ciudadDeposito)
+
+  AsignarArea (rP1, ciudadP)
+  AsignarArea (rP2, ciudadP)
+  AsignarArea (rP1, ciudadPInit)
+  AsignarArea (rP2, ciudadPInit)
+  AsignarArea (rP1, ciudadDeposito)
+  AsignarArea (rP2, ciudadDeposito)
+
+  Iniciar (rF1, 6, 10)
+  Iniciar (rF2, 7, 10)
+  Iniciar (rP1, 8, 10)
+  Iniciar (rP2, 9, 10)
+fin
