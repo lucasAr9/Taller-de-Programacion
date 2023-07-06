@@ -93,6 +93,8 @@ begin
         new(abb);
         abb^.dato.ciudad:= actual;
         abb^.dato.cantDosis:= montoTotal;
+        abb^.hI:= nil;
+        abb^.hD:= nil;
     end
     else
         if (abb^.dato.cantDosis > montoTotal) then
