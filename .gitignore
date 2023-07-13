@@ -30,3 +30,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+/Objetos/p2_ejer1/target/
