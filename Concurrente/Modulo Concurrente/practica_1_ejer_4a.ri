@@ -1,0 +1,72 @@
+programa practica_1_ejer_4
+
+
+procesos
+  proceso juntarF
+  comenzar
+    si (HayFlorEnLaEsquina)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+  fin
+
+  proceso juntarP
+  comenzar
+    si (HayPapelEnLaEsquina)
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+  fin
+
+
+areas
+  ciudad1: AreaP (1,1,25,100)
+  ciudad2: AreaP (26,1,50,100)
+  ciudad3: AreaP (51,1,75,100)
+  ciudad4: AreaP (76,1,100,100)
+
+
+robots
+  robot robot1
+  comenzar
+    repetir 2
+      repetir 24
+        repetir 99
+          juntarF
+          mover
+        juntarF
+        Pos (PosAv + 1, 1)
+      repetir 99
+        juntarF
+        mover
+      juntarF
+      Pos (51, 1)
+  fin
+
+
+  robot robot2
+  comenzar
+    repetir 2
+      repetir 24
+        repetir 99
+          juntarP
+          mover
+        juntarP
+        Pos (PosAv + 1, 1)
+      repetir 99
+        juntarP
+        mover
+      juntarP
+      Pos (76, 1)
+  fin
+
+
+variables
+  Rinfo1: robot1
+  Rinfo2: robot2
+comenzar
+  AsignarArea (Rinfo1,ciudad1)
+  AsignarArea (Rinfo1,ciudad3)
+  AsignarArea (Rinfo2,ciudad2)
+  AsignarArea (Rinfo2,ciudad4)
+  Iniciar (Rinfo1,1,1)
+  Iniciar (Rinfo2,26,1)
+fin

@@ -1,0 +1,132 @@
+programa nombrePrograma
+
+procesos
+  {para el equipo A}
+  proceso juntarPapel (ES papel: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papel:= papel + 1
+  fin
+
+  proceso moverA (ES papel: numero)
+  comenzar
+    repetir 9
+      juntarPapel (papel)
+      mover
+    juntarPapel (papel)
+  fin
+
+  {para el equipo B}
+  proceso juntarFlor (ES flor: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:= flor + 1
+  fin
+
+  proceso moverB (ES flor: numero)
+  comenzar
+    repetir 9
+      juntarFlor (flor)
+      mover
+    juntarFlor (flor)
+  fin
+
+areas
+  ciudadA: AreaP (1,1,40,1)
+  ciudadB: AreaP (1,5,40,5)
+
+
+robots
+  {equipo A que junta papeles}
+  robot tipo1
+  variables
+    papel: numero
+  comenzar
+    papel:= 0
+    derecha
+
+    moverA (papel)
+    EnviarMensaje (papel, a2)
+    Pos (PosAv + 11, PosCa)
+
+    RecibirMensaje (papel, a2)
+
+    moverA (papel)
+    EnviarMensaje (papel, a2)
+  fin
+  {equipo A}
+  robot tipo2
+  variables
+    papel: numero
+  comenzar
+    papel:= 0
+    derecha
+
+    RecibirMensaje (papel, a1)
+
+    moverA (papel)
+    EnviarMensaje (papel, a1)
+    Pos (PosAv + 11, PosCa)
+
+    RecibirMensaje (papel, a1)
+    moverA (papel)
+
+    Informar ('A', papel)
+  fin
+
+
+  {equipo B que junta flores}
+  robot tipo3
+  variables
+    flor: numero
+  comenzar
+    flor:= 0
+    derecha
+
+    moverB (flor)
+    EnviarMensaje (flor, b2)
+    Pos (PosAv + 11, PosCa)
+
+    RecibirMensaje (flor, b2)
+    
+    moverB (flor)
+    EnviarMensaje (flor, b2)
+  fin
+  {equipo B}
+  robot tipo4
+  variables
+    flor: numero
+  comenzar
+    flor:= 0
+    derecha
+
+    RecibirMensaje (flor, b1)
+
+    moverB (flor)
+    EnviarMensaje (flor, b1)
+    Pos (PosAv + 11, PosCa)
+
+    RecibirMensaje (flor, b1)
+    moverB (flor)
+
+    Informar ('B', flor)
+  fin
+
+
+variables
+  a1: tipo1
+  a2: tipo2
+  b1: tipo3
+  b2: tipo4
+comenzar
+  AsignarArea (a1, ciudadA)
+  AsignarArea (a2, ciudadA)
+  AsignarArea (b1, ciudadB)
+  AsignarArea (b2, ciudadB)
+  Iniciar (a1,1,1)
+  Iniciar (a2,11,1)
+  Iniciar (b1,1,5)
+  Iniciar (b2,11,5)
+fin

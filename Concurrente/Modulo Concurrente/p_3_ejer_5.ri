@@ -1,0 +1,121 @@
+programa el_cinco
+
+procesos
+  proceso juntarP (ES p: numero; ES noHayPapel: boolean)
+  comenzar
+    si HayPapelEnLaEsquina
+      tomarPapel
+      p:= p +1
+    sino
+      noHayPapel:= V
+  fin
+
+  proceso dejarP (ES p: numero)
+  comenzar
+    depositarPapel
+    p:= p -1
+  fin
+
+  proceso evaluarGanador (ES maxId: numero; ES maxPasos: numero; E id: numero; E pasos: numero)
+  comenzar
+    si (maxPasos < pasos)
+      maxPasos:= pasos
+      maxId:= id
+  fin
+
+areas
+  ciudad1: AreaP (4,1,4,100)
+  ciudad2: AreaP (6,1,6,100)
+  ciudad3: AreaP (8,1,8,100)
+  ciudad4: AreaP (10,1,10,100)
+  fuente: AreaPC (11,11,11,11)
+  areaJefe: AreaP (1,1,1,1)
+
+
+robots
+  robot tipo1
+  variables
+    pasos, id, papel: numero
+    av, ca: numero
+    noHayPapel: boolean
+  comenzar
+    pasos:= 0
+    noHayPapel:= F
+    av:= PosAv
+    ca:= PosCa
+
+    RecibirMensaje (id, jefe)
+
+    mientras (PosCa < 100) & (noHayPapel = F)
+      BloquearEsquina (11, 11)
+      Pos (11, 11)
+      juntarP (papel, noHayPapel)
+      Pos (av, ca)
+      LiberarEsquina (11, 11)
+      ca:= ca +1
+      pasos:= pasos +1
+  	  dejarP (papel)
+      mover
+    {end;}
+
+    EnviarMensaje (id, jefe)
+    EnviarMensaje (pasos, jefe)
+  fin
+
+
+  robot tipo2
+  variables
+    id, pasos: numero
+    maxId, maxPasos: numero
+  comenzar
+    EnviarMensaje (1, r1)
+    EnviarMensaje (2, r2)
+    EnviarMensaje (3, r3)
+    EnviarMensaje (4, r4)
+
+    repetir 4
+      RecibirMensaje (id, *)
+      si (id = 1)
+        RecibirMensaje (pasos, r1)
+      sino
+        si (id = 2)
+          RecibirMensaje (pasos, r2)
+        sino
+          si (id = 3)
+            RecibirMensaje (pasos, r3)
+          sino
+            si (id = 4)
+              RecibirMensaje (pasos, r4)
+
+      evaluarGanador (maxId, maxPasos, id, pasos)
+    {end;}
+
+    Informar ('ganador', maxId)
+    Informar ('con', maxPasos)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  jefe: tipo2
+comenzar
+  AsignarArea (r1, ciudad1)
+  AsignarArea (r2, ciudad2)
+  AsignarArea (r3, ciudad3)
+  AsignarArea (r4, ciudad4)
+  AsignarArea (jefe, areaJefe)
+
+  AsignarArea (r1, fuente)
+  AsignarArea (r2, fuente)
+  AsignarArea (r3, fuente)
+  AsignarArea (r4, fuente)
+
+  Iniciar (r1,4,1)
+  Iniciar (r2,6,1)
+  Iniciar (r3,8,1)
+  Iniciar (r4,10,1)
+  Iniciar (jefe,1,1)
+fin
