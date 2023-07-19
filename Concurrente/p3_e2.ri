@@ -1,0 +1,122 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntarSegunID (ES j: numero; E id: numero)
+  comenzar
+    si (id = 1)
+      si HayFlorEnLaEsquina
+        mientras HayFlorEnLaEsquina
+          tomarFlor
+          j:= j + 1
+
+    si (id = 2)
+      si HayPapelEnLaEsquina
+        mientras HayPapelEnLaEsquina
+          tomarPapel
+          j:= j + 1
+  fin
+
+
+  proceso izquierda ()
+  comenzar
+    repetir 3
+      derecha
+  fin
+
+
+areas
+  ciudad: areaC (1, 1, 100, 100)
+
+
+robots
+  robot tipo1F
+  variables
+    id, juntar: numero
+    pasos: numero
+  comenzar
+    RecibitMensaje(id, jefe)
+    pasos:= 5
+
+    repetir 4
+      repetir pasos
+        mover
+      juntarSegunID(juntar, id)
+      derecha
+
+      repetir pasos
+        mover
+      juntarSegunID(juntar, id)
+      izquierda
+    
+      pasos:= pasos - 1
+    {end;}
+
+    {esquina especial}
+    mover
+    juntarSegunID(juntar, id)
+    derecha
+    BloquearEsquina(15, 1)
+    mover
+    juntarSegunID(juntar, id)
+    derecha
+    derecha
+    mover
+    LiberarEsquina(15, 1)
+
+    pasos:= pasos + 1
+
+    repetir 4
+      repetir pasos
+        mover
+      juntarSegunID(juntar, id)
+      izquierda
+
+      repetir pasos
+        mover
+      juntarSegunID(juntar, id)
+      derecha
+    
+      pasos:= pasos + 1
+    {end;}
+
+    Informar()
+  fin
+
+
+  robot tipo1P
+  variables
+
+  comenzar
+
+  fin
+  
+
+  robot tipo2
+  variables
+    id: numero
+  comenzar
+    {1 = robot juntar flores}
+    EnviarMensaje(1, rF)
+    {2 = robot juntar papeles}
+    EnviarMensaje(2, rP)
+
+    RecibirMensaje(id, *)
+    Informar('El_Robot_ganador_es', id)
+
+    RecibirMensaje(id, *)
+  fin
+
+
+variables
+  rF: tipo1F
+  rP: tipo1P
+  jefe: tipo2
+comenzar
+  AsignarArea (rF, ciudad)
+  AsignarArea (rP, ciudad)
+  AsignarArea (jefe, ciudad)
+  Iniciar (rF, 1, 1)
+  Iniciar (rP, 31, 1)
+  Iniciar (jefe, 15, 1)
+fin
