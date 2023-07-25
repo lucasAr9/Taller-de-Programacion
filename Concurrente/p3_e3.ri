@@ -1,0 +1,126 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntarF (ES flores: numero; ES seguir: boolean)
+  comenzar
+    si HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores + 1
+    sino
+      seguir:= F
+  fin
+
+
+  proceso calcularMax (E id: numero; ES maxID: numero; E flores: numero; ES maxFlores: numero)
+  comenzar
+    si (flores > maxFlores)
+      maxID:= id
+      maxFlores:= flores
+  fin
+
+
+areas
+  ciudad: areaPC (2, 2, 10, 10)
+  ciudadJ: areaP (1, 1, 1, 1)
+  ciudadRobots: areaPC (2, 1, 5, 1)
+
+
+robots
+  robot tipo1
+  variables
+    id, flores: numero
+    avInit, caInit, av, ca: numero
+    seguir: boolean
+  comenzar
+    RecibirMensaje (id, jefe)
+    RecibirMensaje (av, jefe)
+    RecibirMensaje (ca, jefe)
+
+    flores:= 0
+    avInit:= PosAv
+    caInit:= PosCa
+    seguir:= V
+
+    mientras (seguir = V)
+      BloquearEsquina (av, ca)
+      Pos (av, ca)
+      juntarF (flores, seguir)
+      Pos (avInit, caInit)
+      LiberarEsquina (av, ca)
+
+    EnviarMensaje (id, jefe)
+    EnviarMensaje (flores, jefe)
+  fin
+
+
+  robot tipo2
+  variables
+    av, ca: numero
+    id, maxID, maxFlores, flores: numero
+  comenzar
+    Random (av, 2, 10)
+    Random (ca, 2, 10)
+
+    EnviarMensaje (1, r1)
+    EnviarMensaje (av, r1)
+    EnviarMensaje (ca, r1)
+
+    EnviarMensaje (2, r2)
+    EnviarMensaje (av, r2)
+    EnviarMensaje (ca, r2)
+
+    EnviarMensaje (3, r3)
+    EnviarMensaje (av, r3)
+    EnviarMensaje (ca, r3)
+
+    EnviarMensaje (4, r4)
+    EnviarMensaje (av, r4)
+    EnviarMensaje (ca, r4)
+
+    repetir 4
+      RecibirMensaje (id, *)
+      si (id = 1)
+        RecibirMensaje (flores, r1)
+      sino
+        si (id = 2)
+          RecibirMensaje (flores, r2)
+        sino
+          si (id = 3)
+            RecibirMensaje (flores, r3)
+          sino
+            si (id = 4)
+              RecibirMensaje (flores, r4)
+      calcularMax (id, maxID, flores, maxFlores)
+    {end;}
+
+    Informar ('ganador', id)
+    Informar ('con', maxFlores)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  jefe: tipo2
+comenzar
+  AsignarArea (r1, ciudad)
+  AsignarArea (r1, ciudadRobots)
+  AsignarArea (r2, ciudad)
+  AsignarArea (r2, ciudadRobots)
+  AsignarArea (r3, ciudad)
+  AsignarArea (r3, ciudadRobots)
+  AsignarArea (r4, ciudad)
+  AsignarArea (r4, ciudadRobots)
+
+  AsignarArea (jefe, ciudadJ)
+
+  Iniciar (r1, 2, 1)
+  Iniciar (r2, 3, 1)
+  Iniciar (r3, 4, 1)
+  Iniciar (r4, 5, 1)
+
+  Iniciar (jefe, 1, 1)
+fin

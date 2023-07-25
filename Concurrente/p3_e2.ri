@@ -80,7 +80,7 @@ robots
       pasos:= pasos + 1
     {end;}
 
-    Informar()
+    Informar('Total_flores_juntadas', juntar)
   fin
 
 
@@ -90,7 +90,7 @@ robots
   comenzar
 
   fin
-  
+
 
   robot tipo2
   variables
