@@ -1,0 +1,106 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntarF (ES hay: boolean)
+  comenzar
+    si HayFlorEnLaEsquina
+      tomarFlor
+    sino
+      hay:= F
+  fin
+
+  
+  proceso juntarTodo (ES flores: numero)
+  comenzar
+    si HayFlorEnLaEsquina
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        flores:= flores + 1
+  fin
+
+
+areas
+  ciudadInicio: AreaC (9, 9, 9, 12)
+  ciudadTodos: AreaC (10, 10, 11, 11)
+  ciudadJefe: AreaP (1, 1, 1, 1)
+
+
+robots
+  robot tipo1
+  variables
+    id, flores: numero
+    hay: boolean
+    avInit, caInit: numero
+  comenzar
+    hay:= V
+    flores:= 0
+    RecibirMensaje (id, jefe)
+    avInit:= PosAv
+    caInit:= PosCa
+
+    mientras (hay = V)
+      BloquearEsquina (av, ca)
+      Pos (10, 10)
+      juntarF (hay)
+      Pos (avInit, caInit)
+      depositarFlor
+      LiberarEsquina (10, 10)
+
+      si (hay = V)
+        BloquearEsquina (11, 11)
+        Pos (11, 11)
+        depositarFlor
+        Pos (avInit, caInit)
+        LiberarEsquina (11, 11)
+    
+    EnviarMensaje (id, jefe)
+  fin
+
+
+  robot tipoJ
+  variables
+    id: numero
+  comenzar
+
+    EnviarMensaje (1, r1)
+    EnviarMensaje (2, r2)
+    EnviarMensaje (3, r3)
+    EnviarMensaje (4, r4)
+
+    repetir 4
+      RecibirMensaje (id, *)
+
+    Informar ('ultimo', id)
+
+    Pos (11, 11)
+    juntarTodo (flores)
+    Informar ('total_flores' flores)
+  fin
+
+
+variables
+  jefe: tipoJ
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+comenzar
+  AsignarArea (jefe, ciudadJefe)
+
+  AsignarArea (r1, ciudadInicio)
+  AsignarArea (r2, ciudadInicio)
+  AsignarArea (r3, ciudadInicio)
+  AsignarArea (r4, ciudadInicio)
+
+  AsignarArea (r1, ciudadTodos)
+  AsignarArea (r2, ciudadTodos)
+  AsignarArea (r3, ciudadTodos)
+  AsignarArea (r4, ciudadTodos)
+
+  Iniciar (jefe, 1, 1)
+  Iniciar (r1, 9, 9)
+  Iniciar (r2, 9, 10)
+  Iniciar (r3, 9, 11)
+  Iniciar (r4, 9, 12)
+fin
