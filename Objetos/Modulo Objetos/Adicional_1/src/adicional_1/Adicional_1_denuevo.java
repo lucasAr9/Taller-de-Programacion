@@ -14,14 +14,11 @@ import java.util.Scanner;
 public class Adicional_1_denuevo {
 
     public static void main(String[] args) {
-        /**
-         * esto es una prueba para ver los commits que se mandan
-         */
         Scanner e = new Scanner(System.in);
         
         /* crear un nuevo Proyecto */
         System.out.println("");
-        System.out.println("github");
+        System.out.println("");
         System.out.println("");
         System.out.print("nombre del Proyecto: ");
         String nombre = e.nextLine();
@@ -51,10 +48,10 @@ public class Adicional_1_denuevo {
 //            p.agregarInvestigador(inv);
         }
         
-        /* agregar sub */
-        System.out.print("github: ");
-        System.out.print("github: ");
-        System.out.print("si, no me inches las pelotas a ver: ");
+        /* agregar subsidio */
+        System.out.print("");
+        System.out.print("");
+        System.out.print("nombre: ");
         String nom = e.nextLine();
         System.out.print("monto: ");
         double monto = e.nextDouble();
@@ -62,9 +59,9 @@ public class Adicional_1_denuevo {
         String motivo = e.nextLine();
         Subsidio s = new Subsidio (monto, motivo);
         p.agregarSubInvestigador(nom, s);
-        System.out.print("si, no me inches las pelotas a ver: ");
+        System.out.print("nombre: ");
         
-        System.out.print("a quien se lo otorgamos to: ");
+        System.out.print("a quien se lo otorgamos: ");
 //        String uno = e.nextInt();
 //        p.otorgarTodosSubs(uno);
         

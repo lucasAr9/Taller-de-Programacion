@@ -45,11 +45,11 @@ public class Proyecto {
     
     public int cantDeSubsidios(String apellido) {
         int i = 0;
-        while ((i <= this.cantActual) && (apellido != this.investigadores[i].getApellido())) {
+        while ((i <= this.cantActual) && (!this.investigadores[i].getApellido().equals(apellido))) {
             i++;
         }
         
-        if (apellido == this.investigadores[i].getApellido()) {
+        if (this.investigadores[i].getApellido().equals(apellido)) {
             return this.investigadores[i].getCantActual();
         }
         return 0;
@@ -57,11 +57,11 @@ public class Proyecto {
 
     public void otorgarSubsA(String apellido) {
         int i = 0;
-        while ((i <= this.cantActual) && (apellido != this.investigadores[i].getApellido())) {
+        while ((i <= this.cantActual) && (!this.investigadores[i].getApellido().equals(apellido))) {
             i++;
         }
         
-        if (apellido == this.investigadores[i].getApellido()) {
+        if (this.investigadores[i].getApellido().equals(apellido)) {
             this.investigadores[i].otorgarTodos();
         }
     }
