@@ -189,14 +189,16 @@ function buscar(abb: arbol; patente: integer): arbol;
 begin
     if (abb = nil) then
         buscar:= nil
-    else
+    else begin
         if (patente = abb^.dato.patente) then
             buscar:= abb
-        else 
+        else begin
             if (patente < abb^.dato.patente) then
                 buscar:= buscar(abb^.hI, patente)
             else
                 buscar:= buscar(abb^.hD, patente);
+        end;
+    end;
 end;
 
 
