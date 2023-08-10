@@ -62,7 +62,6 @@ robots
   variables
     id: numero
   comenzar
-
     EnviarMensaje (1, r1)
     EnviarMensaje (2, r2)
     EnviarMensaje (3, r3)

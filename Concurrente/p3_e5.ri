@@ -1,0 +1,111 @@
+programa nombrePrograna
+
+
+procesos
+  proceso juntar(ES hay: boolean)
+  variables
+    av, ca: numero
+  comenzar
+    av: PosAv
+    ca: PosCa
+    BloquearEsquina(11, 11)
+    Pos(11, 11)
+    si (HayPapelEnLaEsquina)
+      tomarPapel
+    sino
+      hay:= F
+    Pos(av, ca)
+    LiberarEsquina(11, 11)
+  fin
+
+
+  proceso evaluarGanador(ES maxID: numero; ES maxPasos: numero; E id: numero; E pasos: numero)
+  comenzar
+    si (maxPasos < pasos)
+      maxID:= id
+      maxPasos:= pasos
+  fin
+
+
+areas
+  ciudad: AreaC(1, 1, 10, 100)
+  ciudadFuente: AreaC(11, 11, 11, 11)
+  ciudadJ: AreaP(12, 12, 12, 12)
+
+
+robots
+  robot tipo1
+  variables
+    id, pasos: numero
+    hay: boolean
+  comenzar
+    RecibirMensaje(id, jefe)
+    pasos:= 0
+    hay:= V
+
+    mientras (PosCa < 100) & (hay = V)
+      juntar(hay, pasos)
+      si (hay = V)
+        pasos:= pasos + 1
+        depositarPapel
+        mover
+    
+    EnviarMensaje (id, jefe)
+    EnviarMensaje (pasos, jefe)
+  fin
+
+
+  robot tipoJ
+  variables
+    maxID, maxPasos, id, pasos: numero
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+
+    repetir 4
+      RecibirMensaje (id, *)
+      si (id = 1)
+        RecibirMensaje (pasos, r1)
+      sino
+        si (id = 2)
+          RecibirMensaje (pasos, r2)
+        sino
+          si (id = 3)
+            RecibirMensaje (pasos, r3)
+          sino
+            si (id = 4)
+              RecibirMensaje (pasos, r4)
+
+      evaluarGanador (maxID, maxPasos, id, pasos)
+    {end;}
+
+    Informar ('ganador', maxID)
+    Informar ('con', maxPasos)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  jefe: tipoJ
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r1, ciudadFuente)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r2, ciudadFuente)
+  AsignarArea(r3, ciudad)
+  AsignarArea(r3, ciudadFuente)
+  AsignarArea(r4, ciudad)
+  AsignarArea(r4, ciudadFuente)
+  AsignarArea(jefe, ciudadJ)
+
+  Iniciar(r1, 4, 1)
+  Iniciar(r2, 6, 1)
+  Iniciar(r3, 8, 1)
+  Iniciar(r4, 10, 1)
+  Iniciar(jefe, 12, 12)
+fin

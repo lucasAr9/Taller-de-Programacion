@@ -15,6 +15,13 @@ public class Fecha {
     private int anio;
     private String ciudad;
 
+    public Fecha(int dia, int mes, int anio, String ciudad) {
+        this.dia = dia;
+        this.mes = mes;
+        this.anio = anio;
+        this.ciudad = ciudad;
+    }
+    
     public int getDia() {
         return dia;
     }
