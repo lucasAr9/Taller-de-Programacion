@@ -126,7 +126,7 @@ begin
 end;
 
 
-{d}
+{buscar un elemento en el arbol}
 function buscar(abb: arbol; patente: String): integer;
 begin
     if (abb = nil) then
