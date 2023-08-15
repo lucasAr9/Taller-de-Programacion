@@ -3,11 +3,9 @@ program imperativo;
 
 const
 numeroSucursal = 5;
-numeroVenta = 250;
 
 type
 cantSucursal = 1..numeroSucursal;
-cantVentas = 1..numeroVenta;
 
 venta = record
 	codigo: integer;
@@ -24,38 +22,75 @@ end;
 vector = array [cantSucursal] of lista;
 
 
-procedure cargar();
+{cargar datos}
+procedure cargar(var v: vector);
+begin end;
 
-
-procedure agregarFinal();
+{merge acumulador}
+procedure agregarFinal(var l, ultimo: lista; actual: integer; cant: integer; monto: real);
 var
-
+	nuevo: lista;
 begin
-
+	new(nuevo);
+	nuevo^.dato.codigo:= actual;
+	nuevo^.dato.cantidad:= cant;
+	nuevo^.dato.monto:= monto;
+	nuevo^.sig:= nil;
+	
+	if (l = nil) then
+		l:= nuevo
+	else
+		ultimo^.sig:= nuevo;
+	ultimo:= nuevo;
 end;
 
-procedure minimo();
+procedure minimo(var v: vector; var min: integer; var cant: integer; var monto: real);
 var
-
+	i, pos: integer;
 begin
-
+	min:= 999;
+	pos:= -1;
+	for i:= 1 to numeroSucursal do begin
+		if (v[i] <> nil) and (v[i]^.dato.codigo < min) then begin
+			min:= v[i]^.dato.codigo;
+			pos:= i;
+		end;
+	end;
+	if (pos <> -1) then begin
+		cant:= v[pos]^.dato.cantidad;
+		monto:= v[pos]^.dato.monto;
+		v[pos]:= v[pos]^.sig;
+	end;
 end;
 
 procedure merge(var v: vector; var l: lista);
 var
 	min, actual: integer;
-	cant, cantTotal, monto, montoTotal: real;
+	cant, cantTotal: integer;
+	monto, montoTotal: real;
+	ultimo: lista;
 begin
 	l:= nil;
-	minimo();
-	while (min <> 999)
+	minimo(v, min, cant, monto);
+	while (min <> 999) do begin
+		actual:= min;
+		cantTotal:= 0;
+		montoTotal:= 0;
+		while (min <> 999) and (actual = min) do begin
+			cantTotal:= cantTotal + cant;
+			montoTotal:= montoTotal + monto;
+			minimo(v, min, cant, monto);
+		end;
+		agregarFinal(l, ultimo, actual, cantTotal, montoTotal);
+	end;
 end;
 
 
+{pp}
 var
-	v: vector;
+	ve: vector;
 	l: lista;
 BEGIN
-	cargar(v);
-	merge(v, l);
+	cargar(ve);
+	merge(ve, l);
 END.
