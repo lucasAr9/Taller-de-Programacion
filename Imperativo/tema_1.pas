@@ -52,10 +52,13 @@ begin
 		agregarAdelante(abb^.dato, c);
 		abb^.hI:= nil;
 		abb^.hD:= nil;
+		writeln('El codigo: ', c.codigo, ' hace una compra por primera vez.');
 	end
 	else begin
-		if (c.codigo = abb^.dato^.datoL.codigo) then
+		if (c.codigo = abb^.dato^.datoL.codigo) then begin
+			writeln('El codigo: ', c.codigo, ' ya tenia una compra hecha.');
 			agregarAdelante(abb^.dato, c)
+		end
 		else if (c.codigo < abb^.dato^.datoL.codigo) then
 			agregarOrdenado(abb^.hI, c)
 		else if (c.codigo > abb^.dato^.datoL.codigo) then
@@ -80,7 +83,7 @@ end;
 {retornar la lista de compras de un cliente determinado por parametro}
 procedure retornarComprasCliente(abb: arbol; var l: lista; var cod: integer);
 begin
-	if (abb <> nil) then
+	if (abb = nil) then
 		l:= nil
 	else if (cod = abb^.dato^.datoL.codigo) then
 		l:= abb^.dato
@@ -108,9 +111,9 @@ end;
 {imprimir}
 procedure imprimirLista(l: lista);
 begin
-	while (l <> nil) do begin
+	if (l^.sig <> nil) then begin
 		writeln('codigo: ', l^.datoL.codigo, ' dia: ', l^.datoL.dia, ' cant: ', l^.datoL.cantProductos, ' mondo: ', l^.datoL.monto:2:2);
-		l:= l^.sig;
+		imprimirLista(l^.sig);
 	end;
 end;
 
