@@ -1,0 +1,183 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        f:= f + 1
+  fin
+
+
+  proceso juntarP (ES p: numero)
+  comenzar
+    si (HayPapelEnLaEsquina)
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        p:= p + 1
+  fin
+
+
+  proceso recorridoSinConflictoF (E pasos: numero; ES flores: numero)
+  comenzar
+    repetir pasos
+      mover
+      juntarF (flores)
+  fin
+
+
+  proceso recorridoSinConflictoP (E pasos: numero; ES papeles: numero)
+  comenzar
+    repetir pasos
+      mover
+      juntarF (papeles)
+  fin
+
+
+areas
+ciudad1: areaPC (2, 2, 8, 8)
+ciudad2: areaPC (5, 5, 15, 15)
+ciudad3: areaPC (9, 9, 16, 16)
+ciudad123: areaC (1, 20, 100, 22)
+ciudadJ: areaP (1, 1, 1, 1)
+
+
+robots
+  robot tipo1 {r1 junta flores, inicia en (2, 2) y recorre perimetro de 6x6}
+  variables   {tiene riesgo de colicion en (5,8) y (8,5)}
+    id, ca, flores: numero
+  comenzar
+    RecibirMensaje (id, jefe)
+    flores:= 0
+
+    recorridoSinConflictoF (6, flores)
+    
+    derecha
+
+    repetir 6
+      si (PosAv + 1 = 5) & (PosCa = 8)
+        BloquearEsquina (PosAv + 1, PosCa)
+        mover
+        juntarF (flores)
+      sino
+        mover
+        si (PosAv - 1 = 5) & (PosCa = 8)
+          LiberarEsquina (PosAv - 1, PosCa)
+        juntarF (flores)
+
+    derecha
+
+    repetir 6
+      si (PosAv = 8) & (PosCa - 1 = 5)
+        BloquearEsquina (PosAv, PosCa - 1)
+        mover
+        juntarF (flores)
+      sino
+        mover
+        si (PosAv - 1 = 8) & (PosCa + 1 = 5)
+          LiberarEsquina (PosAv, PosCa + 1)
+        juntarF (flores)
+
+    derecha
+
+    recorridoSinConflictoF (6, flores)
+
+    EnviarMensaje (1, jefe)
+    RecibirMensaje (ca, jefe)
+
+    Pos(1, ca)
+    derecha
+    mientras (PosCa < 100) & (flores > 0)
+      si (HayFlorEnLaBolsa)
+        depositarFlor
+        flores:= flores - 1
+  fin
+
+
+  robot tipo2 {r2 junta flores y papeles, inicia en (5, 5) y recorre perimetro de 10x10}
+  variables   {tiene riesgo de colicion en (5,8) y (8,5) | (15,9) y (9,15)}
+    id, av, ca, flores, papeles: numero
+  comenzar
+    RecibirMensaje (id, jefe)
+    flores:= 0
+    papeles:= 0
+    av:= PosAv
+    ca:= PosCa
+
+
+    EnviarMensaje (id, jefe)
+    RecibirMensaje (ca, jefe)
+
+    Pos(1, ca)
+    derecha
+    mientras (PosCa < 100) & (flores > 0) | (papeles > 0)
+      si (HayFlorEnLaBolsa)
+        depositarFlor
+        flores:= flores - 1
+      sino
+        si (HayPapelEnLaBolsa)
+          depositarPapel
+          papeles:= papeles - 1
+  fin
+
+
+  robot tipo3 {r3 junta papeles, inicia en (9, 9) y recorre perimetro de 7x7}
+  variables   {tiene riesgo de colicion en (15,9) y (9,15)}
+    id, av, ca, papeles: numero
+  comenzar
+    RecibirMensaje (id, jefe)
+    papeles:= 0
+    av:= PosAv
+    ca:= PosCa
+
+
+
+    EnviarMensaje (id, jefe)
+    RecibirMensaje (ca, jefe)
+
+    Pos(1, ca)
+    derecha
+    mientras (PosCa < 100) & (papeles > 0)
+      si (HayFlorEnLaBolsa)
+        depositarFlor
+        papeles:= papeles - 1
+  fin
+
+
+  robot tipoJ
+  variables
+    id: numero
+  comenzar
+    RecibirMensaje (id, *)
+    EnviarMensaje (20, id)
+    RecibirMensaje (id, *)
+    EnviarMensaje (21, id)
+    RecibirMensaje (id, *)
+    EnviarMensaje (22, id)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo2
+  r3: tipo3
+  jefe: tipoJ
+comenzar
+  AsignarArea (r1, ciudad1)
+  AsignarArea (r2, ciudad2)
+  AsignarArea (r3, ciudad3)
+  
+  AsignarArea (r1, ciudad123)
+  AsignarArea (r2, ciudad123)
+  AsignarArea (r3, ciudad123)
+  
+  AsignarArea (jefe, ciudadJ)
+
+  Iniciar (r1, 2, 2)
+  Iniciar (r2, 5, 5)
+  Iniciar (r3, 9, 9)
+
+  Iniciar (jefe, 1, 1)
+fin
