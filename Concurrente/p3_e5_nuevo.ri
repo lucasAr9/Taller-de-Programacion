@@ -1,0 +1,122 @@
+programa nombrePrograma
+
+
+procesos
+  proceso juntarP (ES hay: boolean)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+    sino
+      hay:= F
+  fin
+
+
+  proceso saltarFuenta (ES hay: boolean)
+  variables
+    av, ca: numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    BloquearEsquina (11, 11)
+    Pos (11, 11)
+    juntarP (hay)
+    Pos (av, ca)
+    LiberarEsquina (11, 11)
+  fin
+
+
+  proceso calcularMax (E id: numero; E pasos: numero; ES idMax: numero; ES pasosMax: numero)
+  comenzar
+    si (pasos > pasosMax)
+      idMax:= id
+      pasosMax:= pasos
+  fin
+
+
+areas
+  ciudad1: areaP (4, 1, 4, 100)
+  ciudad2: areaP (6, 1, 6, 100)
+  ciudad3: areaP (8, 1, 8, 100)
+  ciudad4: areaP (10, 1, 10, 100)
+  ciudadFuente: AreaPC (11, 11, 11, 11)
+  ciudadJ: AreaP (1, 1, 1, 1)
+
+
+robots
+  robot tipo1
+  variables
+    hay: boolean
+    id, pasos: numero
+  comenzar
+    RecibirMensaje (id, rJ)
+    hay:= V
+    pasos:= 0
+    mientras (PosCa <= 100) & (hay = V)
+      saltarFuenta (hay)
+      si (hay = V)
+        depositarFlor
+        mover
+        pasos:= pasos + 1
+    
+    EnviarMensaje (id, rJ)
+    EnviarMensaje (pasos, rJ)
+  fin
+
+
+  robot tipo2
+  variables
+    id, pasos, idMax, pasosMax: numero
+  comenzar
+    idMax:= 0
+    pasosMax:= 0
+
+    EnviarMensaje (1, r1)
+    EnviarMensaje (2, r2)
+    EnviarMensaje (3, r3)
+    EnviarMensaje (4, r4)
+
+    repetir 4
+      RecibirMensaje (id, *)
+      si (id = 1)
+        RecibirMensaje (pasos, r1)
+      sino
+        si (id = 2)
+          RecibirMensaje (pasos, r2)
+        sino
+          si (id = 3)
+            RecibirMensaje (pasos, r3)
+          sino
+            si (id = 4)
+              RecibirMensaje (pasos, r4)
+      calcularMax(id, pasos, idMax, pasosMax)
+    
+    Informar ('id', idMax)
+    Informar ('pasos', pasosMax)
+  fin
+
+
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  rJ: tipo2
+comenzar
+  AsignarArea (r1, ciudad1)
+  AsignarArea (r2, ciudad2)
+  AsignarArea (r3, ciudad3)
+  AsignarArea (r4, ciudad4)
+  
+  AsignarArea (r1, ciudadFuente)
+  AsignarArea (r2, ciudadFuente)
+  AsignarArea (r3, ciudadFuente)
+  AsignarArea (r4, ciudadFuente)
+
+  AsignarArea (rJ, ciudadJ)
+
+  Iniciar (r1, 4, 1)
+  Iniciar (r2, 6, 1)
+  Iniciar (r3, 8, 1)
+  Iniciar (r4, 10, 1)
+  Iniciar (rJ, 1, 1)
+fin
