@@ -87,7 +87,7 @@ var
     nuevo: lista;
 begin
     new(nuevo);
-    nuevo^.dato:= min;
+    nuevo^.dato:= num;
     nuevo^.sig:= nil;
 
     if (l = nil) then
