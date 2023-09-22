@@ -1,0 +1,125 @@
+programa nombrePrograma
+
+
+procesos
+  proceso irAFuente(E f: boolean; E av: numero; E ca: numero)
+  comenzar
+    BloquearEsquina (15, 15)
+    Pos (15, 15)
+    si (f = V)
+      tomarFlor
+    sino
+      tomarPapel
+    Pos (av, ca)
+    LiberarEsquina (15, 15)
+  fin
+
+
+  proceso recorrer(E f: boolean; E av: numero; E ca: numero; E avBloq: numero E caBloq: numero)
+  comenzar
+    irAFuente (f, av, ca)
+    BloquearEsquina (avBloq, caBloq)
+    Pos (avBloq, caBloq)
+    si (f = V)
+      depositarFlor
+    sino
+      depositarPapel
+    Pos (av, ca)
+    LiberarEsquina (avBloq, caBloq)
+  fin
+
+
+areas
+  ciudadEquipo1: AreaPC (5, 4, 9, 16)
+  ciudadEquipo2: AreaPC (11, 4, 15, 16)
+  ciudadInicio: AreaC (50, 50, 53, 53)
+  ciudadFuente: AreaC (15, 15, 15, 15)
+  ciudadFiscalizador: AreaP (1, 1, 1, 1)
+
+
+robots
+  {robot 1 de tipoF hace linea vertical depositando papeles, alto de 12}
+  robot tipoF
+  variables
+    e, id, av, ca, avBloq, caBloq: numero
+  comenzar
+    RecibirMensaje (e, rj)
+    RecibirMensaje (id, rj)
+
+    av:= PosAv
+    ca:= PosCa
+    si (e = 1)
+      avBloq:= 5
+      caBloq:= 4
+    sino
+      avBloq:= 11
+      caBloq:= 4
+
+    repetir 12
+      caBloq:= caBloq + 1
+      recorrer (V, av, ca, avBloq, caBloq)
+    
+    EnviarMensaje (e, rj)
+    EnviarMensaje (id, rj)
+  fin
+
+
+  {robot 2 de tipoP hace linea horizontal depositando flores, ancho de 4}
+  robot tipoP
+  variables
+    e, id, av, ca, avBloq, caBloq: numero
+  comenzar
+    RecibirMensaje (e, rj)
+    RecibirMensaje (id, rj)
+
+    av:= PosAv
+    ca:= PosCa
+    si (e = 1)
+      avBloq:= 5
+      caBloq:= 4
+    sino
+      avBloq:= 11
+      caBloq:= 4
+
+    repetir 4
+      avBloq:= avBloq + 1
+      recorrer (F, av, ca, avBloq, caBloq)
+    
+    EnviarMensaje (e, rj)
+    EnviarMensaje (id, rj)
+  fin
+
+
+  robot tipoJ
+  variables
+  
+  comenzar
+
+  fin
+
+
+variables
+  e1r1: tipo1
+  e1r2: tipo1
+  e2r1: tipo1
+  e2r2: tipo1
+  rj: tipoJ
+comenzar
+  AsignarArea (e1r1, ciudadEquipo1)
+  AsignarArea (e1r2, ciudadEquipo1)
+  AsignarArea (e2r1, ciudadEquipo2)
+  AsignarArea (e2r2, ciudadEquipo2)
+
+  AsignarArea (e1r1, ciudadInicio)
+  AsignarArea (e1r2, ciudadInicio)
+  AsignarArea (e2r1, ciudadInicio)
+  AsignarArea (e2r2, ciudadInicio)
+
+  AsignarArea (rj, ciudadFiscalizador)
+
+  Iniciar (e1r1, 50, 50)
+  Iniciar (e1r2, 51, 51)
+  Iniciar (e2r1, 52, 52)
+  Iniciar (e2r2, 53, 53)
+  Iniciar (rj, 1, 1)
+fin

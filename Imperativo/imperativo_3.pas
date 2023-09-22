@@ -71,7 +71,14 @@ end;
 {suma de todos los montos vendidos para los codigos de producto mayores al codigo por parametro}
 procedure sumar(abb: arbol; cod: integer; var monto: real);
 begin
-    
+    if (abb <> nil) then begin
+        if (cod < abb^.dato.codigo) then
+            sumar(abb^.hI, cod, monto)
+        else
+            sumar(abb^.hD, cod, monto);
+        end;
+        monto:= monto + abb^.dato.montoTotal;
+    end;
 end;
 
 
