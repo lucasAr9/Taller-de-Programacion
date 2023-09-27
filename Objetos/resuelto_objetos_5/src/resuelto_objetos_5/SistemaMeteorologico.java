@@ -49,7 +49,6 @@ public class SistemaMeteorologico {
     public String toString(String reporte) {
         String aux = "";
         double suma = 0;
-        double promedio = 0;
         aux = aux + estacion.toString();
 
         if (reporte.equals("mes")) {
