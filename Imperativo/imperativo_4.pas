@@ -66,9 +66,16 @@ end;
 
 
 {sumar todos los montos de los codigos superiores al recibido por parametro}
-procedure sumarTodosLosMontosPorCodigo();
+procedure sumarTodosLosMontosPorCodigo(abb: arbol; cod: integer; var montoTotal: real);
 begin
-
+    if (abb <> nil) then
+        if (cod <= abb^.dato.codigo) then
+            sumarTodosLosMontosPorCodigo(abb^.hI, cod, montoTotal);
+        else
+            sumarTodosLosMontosPorCodigo(abb^.hD, cod, montoTotal);
+        end;
+        montoTotal:= montoTotal + abb^.dato.montoTotal;
+    end;
 end;
 
 
